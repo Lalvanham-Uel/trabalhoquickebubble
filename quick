@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    int prioridade;
+    int tempo;
+    char nome[51];
+} Prato;
+
+int particao(Prato *v, int e, int d){
+    Prato pivo = v[d];
+    int i = e, j;
+    for(j = e; j < d; j++){
+        if(v[j].prioridade > pivo.prioridade ||
+           (v[j].prioridade == pivo.prioridade && v[j].tempo < pivo.tempo)){
+            Prato aux = v[i];
+            v[i] = v[j];
+            v[j] = aux;
+            i++;
+        }
+    }
+    Prato aux = v[i];
+    v[i] = v[d];
+    v[d] = aux;
+    return i;
+}
+
+void rapido(Prato *v, int e, int d){
+    if(e < d){
+        int p = particao(v, e, d);
+        rapido(v, e, p - 1);
+        rapido(v, p + 1, d);
+    }
+}
+
+int main(){
+    int k, i;
+    scanf("%d", &k);
+    Prato *lista = malloc(k * sizeof(Prato));
+    for(i=0; i<k; i++){
+        scanf("%d %d %s", &lista[i].prioridade, &lista[i].tempo, lista[i].nome);
+    }
+    rapido(lista, 0, k-1);
+    for(i=0; i<k; i++){
+        printf("%s\n", lista[i].nome);
+    }
+    free(lista);
+    return 0;
+}

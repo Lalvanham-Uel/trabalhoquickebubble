@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    int prioridade;
+    int tempo;
+    char nome[51];
+} Prato;
+
+void bolha(Prato *v, int n){
+    int i, j;
+    for(i=0;i<n-1;i++){
+        for(j=0;j<n-1-i;j++){
+            if(v[j].prioridade < v[j+1].prioridade ||
+               (v[j].prioridade == v[j+1].prioridade && v[j].tempo > v[j+1].tempo)){
+                Prato aux = v[j];
+                v[j] = v[j+1];
+                v[j+1] = aux;
+            }
+        }
+    }
+}
+
+int main(){
+    int k, i;
+    scanf("%d", &k);
+    Prato *lista = malloc(k * sizeof(Prato));
+    for(i=0; i<k; i++){
+        scanf("%d %d %s", &lista[i].prioridade, &lista[i].tempo, lista[i].nome);
+    }
+    bolha(lista, k);
+    for(i=0; i<k; i++){
+        printf("%s\n", lista[i].nome);
+    }
+    free(lista);
+    return 0;
+}
